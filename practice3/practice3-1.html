@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      이름:
+      <input type="text" v-model="name" @input="changeName" />
+      <br />
+      나이: <input type="text" v-model.number="age" @input="changeAge" />
+      <br />
+      <button @click="entrance">입학승인</button>
+      <br />
+      <span>{{warnmessageforname}}</span>
+      <br />
+      <span>{{warnmessageforage}}</span>
+    </div>
+
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+      let vm = Vue.createApp({
+        name: 'App',
+        data() {
+          return {
+            name: '',
+            age: 0,
+            warnmessageforname: '',
+            warnmessageforage: '',
+          };
+        },
+        methods: {
+          changeName(e) {
+            if (this.name == '') {
+              this.warnmessageforname = '';
+            } else if (this.name.length < 2) {
+              this.warnmessageforname = '이름은 2글자 이상 입력해주세요.';
+            } else {
+              this.warnmessageforname = '';
+            }
+
+            if (/\d/.test(this.name)) {
+              this.warnmessageforname = '이름에는 숫자를 포함할 수 없습니다.';
+            } else {
+              this.warnmessageforname = '';
+            }
+          },
+          changeAge(e) {
+            if (this.age < 11 || this.age > 18) {
+              this.warnmessageforage =
+                '나이는 11세 이상 18세 이하로 입력해주세요.';
+            } else {
+              this.warnmessageforage = '';
+            }
+          },
+          entrance(e) {
+            this.warnmessageforname = `${this.name}, ${this.age}세 호그와트 입학을 축하합니다!`;
+          },
+        },
+      }).mount('#app');
+    </script>
+  </body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      이름: <input type="text" v-model="name" />
+      <br />
+      출생연도: <input type="number" v-model.num="year" />
+      <br />
+      {{result}} {{checkAge}}
+      <span>{{message}}</span>
+    </div>
+
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+      let vm = Vue.createApp({
+        name: 'App',
+        data() {
+          return {
+            name: '',
+            year: 0,
+            dormitory: '',
+            check: false,
+            message: '조건을 충족해주세요!',
+          };
+        },
+        computed: {
+          result() {
+            if (this.dormitory != '' && this.check) {
+              this.message = `${this.name}님은 ${
+                this.dormitory
+              }에 배정되었습니다. (나이: ${
+                new Date().getFullYear() - this.year
+              }세)`;
+            }
+          },
+          checkAge() {
+            if (
+              new Date().getFullYear() - this.year < 11 ||
+              new Date().getFullYear() - this.year >= 19
+            ) {
+              this.message = '⚠ 입학 대상 연령이 아닙니다.';
+            } else {
+              this.check = true;
+            }
+          },
+        },
+        watch: {
+          name(current, old) {
+            if (
+              ['a', 'e', 'i', 'o', 'u'].includes(
+                current.charAt(0).toLowerCase()
+              )
+            ) {
+              return (this.dormitory = '그리핀도르');
+            } else if (current.length >= 5) {
+              return (this.dormitory = '래번클로');
+            } else if (
+              current.charAt(current.length - 1) == 'n' ||
+              current.charAt(current.length - 1) == 'ㄴ'
+            ) {
+              return (this.dormitory = '후플푸프');
+            } else {
+              this.dormitory = '슬리데린';
+            }
+          },
+        },
+      }).mount('#app');
+    </script>
+  </body>
+</html>
