@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <button @click="addStick">지팡이 추가</button>
+        <button @click="addRobe">로브 추가</button>
+        <button @click="addOwl">부엉이 추가</button>
+        <br>
+        <h3>장바구니:</h3>
+        <ul>
+            <li v-for="(item, index) in basket"> - {{item.name}} ({{item.price}}G) <button @click="Cancel(index)">삭제</button></li>
+        </ul>
+      
+        <span>총 합계: {{total}}G</span>
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+        let vm = Vue.createApp({
+            name:'App',
+            data(){
+                return {
+                    basket:[]
+                }
+
+            },
+            computed: {
+                total() {
+                    return this.basket.reduce((sum, item) => sum + item.price, 0);
+                }
+            },
+            methods:{
+                addStick(){
+                    this.basket.push({name:'지팡이', price:100});
+                },
+                addRobe(){
+                    this.basket.push({name:'로브', price:200});
+                },
+                addOwl(){
+                    this.basket.push({name:'부엉이', price:300});
+                },
+                Cancel(index){
+                    console.log(index);
+                    this.basket.splice(index, 1);
+                }
+            }
+        }).mount("#app");
+    </script>
+</body>
+</html>

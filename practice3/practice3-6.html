@@ -3,18 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>마법 시험 평가</title>
   </head>
   <body>
     <div id="app">
-      <form>
-        마법이론: <input type="number" v-model="magicScore" /> <br />
-        주문실습:<input type="number" v-model="orderScore" /><br />
-        비행수업: <input type="number" v-model="flightScore" /><br />
-        <button @click="avg">평가하기</button>
-      </form>
-      <br />
-      <span>{{result}}</span>
+      <h2>마법 시험 평가</h2>
+      마법이론: <input type="number" v-model="magicScore" /><br />
+      주문실습: <input type="number" v-model="orderScore" /><br />
+      비행수업: <input type="number" v-model="flightScore" /><br />
+      <button @click="evaluate">평가하기</button>
+      <br /><br />
+      <span>{{ result }}</span>
     </div>
 
     <script src="https://unpkg.com/vue"></script>
@@ -23,43 +22,49 @@
         name: 'App',
         data() {
           return {
-            magicScroe: 0,
-            orderScroe: 0,
+            magicScore: 0,
+            orderScore: 0,
             flightScore: 0,
             result: '',
           };
         },
         computed: {
-          avg() {
-            let average =
-              (this.magicScroe + this.orderScroe + this.flightScore) / 3;
-            if (average >= 90) {
-              this.result = '최우수 합격';
-            } else if (average >= 70) {
-              this.result = '합격';
+          average() {
+            return (this.magicScore + this.orderScore + this.flightScore) / 3;
+          },
+        },
+        methods: {
+          evaluate() {
+            if (this.average >= 90) {
+              this.result = "🏅 최우수 합격!";
+            } else if (this.average >= 70) {
+              this.result = "✅ 합격";
             } else {
-              this.result = '불합격';
+              this.result = "❌ 불합격";
             }
           },
         },
         watch: {
-          magicScroe(current, old) {
-            if (current > 100 || current < 0) {
-              alert('점수는 0~100 사이로 입력해주세요!');
+          magicScore(value) {
+            if (value > 100 || value < 0) {
+              alert("점수는 0~100 사이로 입력해주세요!");
+              this.magicScore = 0;
             }
           },
-          orderScroe(current, old) {
-            if (current > 100 || current < 0) {
-              alert('점수는 0~100 사이로 입력해주세요!');
+          orderScore(value) {
+            if (value > 100 || value < 0) {
+              alert("점수는 0~100 사이로 입력해주세요!");
+              this.orderScore = 0;
             }
           },
-          flightScore(current, old) {
-            if (current > 100 || current < 0) {
-              alert('점수는 0~100 사이로 입력해주세요!');
+          flightScore(value) {
+            if (value > 100 || value < 0) {
+              alert("점수는 0~100 사이로 입력해주세요!");
+              this.flightScore = 0;
             }
           },
         },
-      }).mount('#app');
+      }).mount("#app");
     </script>
   </body>
 </html>

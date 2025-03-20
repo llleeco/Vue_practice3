@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <h2>호그와트 마법 도서관 출입 관리 시스템</h2>
+        마법사 이름 입력: <input type="text" v-model="name"><button @click="enter" :disabled="enterCount>=5">출입 기록 추가</button>
+        <br>
+        <span style="color:red">{{warn}}</span>
+        <h3>현재 도서관 출입 중 (최근 순):</h3>
+        <ul>
+            <li v-for="(wizard, index) in names">{{index+1}}. {{wizard}} <button @click="exit(index)">퇴장</button></li>
+        </ul>
+        <h3>출입 횟수 통계: </h3>
+        <ul>
+            <li v-for="wizard in enteredWizards">{{wizard.name}}: {{wizard.count}}회 출입 </li>
+        </ul>
+        <br>
+        <span>{{mostFrequentWizard}}</span>
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+        let vm = Vue.createApp({
+            name:'App',
+            data(){
+                return {
+                    name:'',
+                    enterCount:0,
+                    enteredWizards:[],
+                    names:[],
+                    warn:'',
+                }
+            },
+            watch:{
+                enterCount(current, old){
+                    if(current >= 5){
+                    this.warn="⚠ 현재 도서관 인원 포화 상태입니다! 더 이상 출입할 수 없습니다."; 
+                    }else{
+                        this.warn="";
+                    }
+         
+                }
+            },
+            computed:{
+                mostFrequentWizard(){
+                    if(this.enteredWizards.length>=1){
+                        let most = this.enteredWizards[0]
+                    for(wizard of this.enteredWizards){
+                        if(most.count<wizard.count){
+                            most = wizard;
+                        }
+                    }
+                    return `가장 많이 출입한 마법사: ${most.name} (${most.count}회)`;
+        
+                    }else{
+                        return "";
+                    }
+             }
+            },
+            methods:{
+                enter(){              
+                    if(this.names.includes(this.name)){
+                        console.error(`${this.name}님은 이미 출입하셨습니다.`);
+                       // alert(`${this.name}님은 이미 출입하셨습니다.`);
+                    }else{
+                        this.enterCount++;
+                        this.names.unshift(this.name);
+                        let existingWizard  = this.enteredWizards.findIndex((wizard) => {
+                            return wizard.name === this.name;
+                        })
+                        if(existingWizard != -1){
+                            this.enteredWizards[existingWizard].count++;
+                        }
+                        else{
+                            this.enteredWizards.unshift({name:this.name, count:1});
+                        }
+                    }
+                },
+                exit(index){
+                    this.enterCount--;
+                    this.names.splice(index,1);
+                }
+            },
+            created(){
+                console.log("📚 도서관 관리 시스템 가동!");
+            },
+            mounted(){
+                console.log("✅ 도서관 준비 완료!");
+            }
+        }).mount("#app");
+    </script>
+</body>
+</html>
